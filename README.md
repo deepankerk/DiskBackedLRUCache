@@ -12,6 +12,5 @@ Different read calls (even from different threads) can read the values from file
 Overiding the removeEldestEntry of the LinkedHashMap to remove the least recently used file. This ensures that our cache behaves in the LRU manner.
 
 Possible Improvements:
-1. Making it thread safe.
-2. Delete the existing files (if present) in Cache folder when getting a cache instance.
-3. Instead of diffent files for every object can we do it in one file and then at the time of get(K key) read from the same file?
+1. Delete the existing files (if present) in Cache folder when getting a cache instance.
+2. Instead of diffent files for every object can we do it in one file and then at the time of get(K key) read from the same file?
