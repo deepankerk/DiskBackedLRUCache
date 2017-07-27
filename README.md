@@ -6,8 +6,8 @@ To keep things simple, the name of the file (which holds our value) is the hashc
 
 Space/Time Complexity: O(n)/O(1) since size of the map (and number of files) will be equal to the number of currently cached objects. The time complexity will be amortized O(1) since value (filenames) are stored in a LinkedHashMap which gives us a O(1) access to them.
 
-Is it thread safe? 
-The access to LinkedHashMap used to hold our key and filenames is synchronized but reading/writing to the same file via different threads could lead to an undefined output so no right now the cache is not thread safe.
+Is it thread safe?
+Different read calls (even from different threads) can read the values from file. They will not be blocked by each other. But put calls will only happen one after the other to avoid data corruption. If reading from the same file on which write is going on the the behavior is undefined.
 
 Overiding the removeEldestEntry of the LinkedHashMap to remove the least recently used file. This ensures that our cache behaves in the LRU manner.
 
