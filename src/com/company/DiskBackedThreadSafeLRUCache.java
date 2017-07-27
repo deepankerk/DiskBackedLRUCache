@@ -39,7 +39,7 @@ public class DiskBackedThreadSafeLRUCache<K, V> {
         this.directory = directory;
     }
 
-    public void put(K key, V value) {
+    public synchronized void put(K key, V value) {
         String fileName = directory + "/" + key.hashCode();
         try {
             FileOutputStream fileOut = new FileOutputStream(fileName);
@@ -56,7 +56,7 @@ public class DiskBackedThreadSafeLRUCache<K, V> {
         }
     }
 
-    public synchronized V get(K key) {
+    public V get(K key) {
         if(!cache.containsKey(key))
             return null;
         try {
