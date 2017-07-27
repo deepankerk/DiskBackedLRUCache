@@ -56,25 +56,23 @@ public class DiskBackedThreadSafeLRUCache<K, V> {
         }
     }
 
-    public V get(K key) {
-        synchronized(cache) {
-            if(!cache.containsKey(key))
-                return null;
-            try {
-                FileInputStream inputFileStream = new FileInputStream(cache.get(key));
-                ObjectInputStream objectInputStream = new ObjectInputStream(inputFileStream);
-
-                V deserializedObj = (V) objectInputStream.readObject();
-
-                objectInputStream.close();
-                inputFileStream.close();
-
-                return deserializedObj;
-            }
-            catch(IOException | ClassNotFoundException e) {
-                // Appropriate exception handling like logging etc.
-            }
+    public synchronized V get(K key) {
+        if(!cache.containsKey(key))
             return null;
+        try {
+            FileInputStream inputFileStream = new FileInputStream(cache.get(key));
+            ObjectInputStream objectInputStream = new ObjectInputStream(inputFileStream);
+
+            V deserializedObj = (V) objectInputStream.readObject();
+
+            objectInputStream.close();
+            inputFileStream.close();
+
+            return deserializedObj;
         }
+        catch(IOException | ClassNotFoundException e) {
+            // Appropriate exception handling like logging etc.
+        }
+        return null;
     }
 }
