@@ -41,20 +41,18 @@ public class DiskBackedThreadSafeLRUCache<K, V> {
 
     public void put(K key, V value) {
         String fileName = directory + "/" + key.hashCode();
-        synchronized(cache) {
-            try {
-                FileOutputStream fileOut = new FileOutputStream(fileName);
-                ObjectOutputStream out = new ObjectOutputStream(fileOut);
+        try {
+            FileOutputStream fileOut = new FileOutputStream(fileName);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
 
-                out.writeObject(value);
-                // If the object has been successfully serialized then only put it in cache.
-                cache.put(key, fileName);
+            out.writeObject(value);
+            // If the object has been successfully serialized then only put it in cache.
+            cache.put(key, fileName);
 
-                out.close();
-                fileOut.close();
-            } catch (IOException e) {
+            out.close();
+            fileOut.close();
+        } catch (IOException e) {
 
-            }
         }
     }
 
