@@ -18,4 +18,4 @@ Problems as of now:
 Possible Improvements:
 1. Move to an enum based singleton pattern for the cache object. (Best practice effective java!)
 2. Delete the existing files (if present) in Cache folder when getting a cache instance.
-3. Instead of diffent files for every object can we do it in one file and then at the time of get(K key) read from the same file? There must be a way to seek an existing file. This will save us overhead of creating new files for every new value.
+3. Instead of diffent files for every object can we do it in one file and then at the time of get(K key) read from the same file? There must be a way to seek an existing file. Since I/O is serialized we can improve our read latency by avoiding the work of opening a new file every time (avoiding many disk seeks) and while writing avoiding the work of creating new files as well.
