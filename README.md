@@ -16,5 +16,6 @@ Problems as of now:
 2. No test case to test the behavior in case of multi-threading scenario.
 
 Possible Improvements:
-1. Delete the existing files (if present) in Cache folder when getting a cache instance.
-2. Instead of diffent files for every object can we do it in one file and then at the time of get(K key) read from the same file? There must be a way to seek an existing file. This will save us overhead of creating new files for every new value.
+1. Move to an enum based singleton pattern for the cache object. (Best practice effective java!)
+2. Delete the existing files (if present) in Cache folder when getting a cache instance.
+3. Instead of diffent files for every object can we do it in one file and then at the time of get(K key) read from the same file? There must be a way to seek an existing file. This will save us overhead of creating new files for every new value.
