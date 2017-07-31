@@ -12,7 +12,6 @@ public class DiskBackedThreadSafeLRUCacheTest {
     @Test
     public void testStandardGetAndSet() {
         DiskBackedThreadSafeLRUCache<Integer, Double> cache = DiskBackedThreadSafeLRUCache.open(10);
-
         cache.put(1, 12.12);
         cache.put(2, 12.1234);
         cache.put(3, 12.121313);
@@ -38,7 +37,6 @@ public class DiskBackedThreadSafeLRUCacheTest {
     @Test
     public void testingCustomDomainObject() {
         DiskBackedThreadSafeLRUCache<SampleDomainObject, SampleDomainObject> cache = DiskBackedThreadSafeLRUCache.open(10);
-
         SampleDomainObject s1 = new SampleDomainObject(1, Calendar.getInstance().getTime(), "Deepanker");
         cache.put(s1, s1);
 
@@ -77,6 +75,18 @@ public class DiskBackedThreadSafeLRUCacheTest {
         cache.put(s11, s11);
 
         Assert.assertEquals(null, cache.get(s1));
+    }
+
+    @Test
+    public void testSettingMultipleValuesForSameKey() {
+        DiskBackedThreadSafeLRUCache<Integer, Double> cache = DiskBackedThreadSafeLRUCache.open(10);
+        cache.put(1, 12.12);
+        cache.put(1, 12.1234);
+        cache.put(1, 12.121313);
+        cache.put(1, 12.13132);
+        cache.put(1, 12.33432525);
+
+        Assert.assertEquals(Double.valueOf(12.33432525), (Double) cache.get(1));
     }
 
 }
