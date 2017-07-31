@@ -1,4 +1,4 @@
-# LRUCache
+# DiskBackedLRUCache
 
 Disk backed LRU Cache which writes the cache values to files in a directory called Cache. 
 
