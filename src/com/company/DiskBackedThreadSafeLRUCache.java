@@ -1,6 +1,11 @@
 package com.company;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,14 +14,20 @@ import java.util.Map;
 
 public class DiskBackedThreadSafeLRUCache<K, V> {
 
+    private static DiskBackedThreadSafeLRUCache cacheObj;
     private final Map<K,String> cache;
     private final String directory;
 
     public static DiskBackedThreadSafeLRUCache open(final int maxEntries) {
+        // Cache must be singleton. If the instance exist return that other create one;
+        if(cacheObj != null) {
+            return cacheObj;
+        }
+
         File cacheDir = new File("Cache");
         cacheDir.mkdir(); //Doesn't create if already exists.
-        DiskBackedThreadSafeLRUCache cache =  new DiskBackedThreadSafeLRUCache(Paths.get("Cache").toAbsolutePath().toString(), maxEntries);
-        return cache;
+        cacheObj =  new DiskBackedThreadSafeLRUCache(Paths.get("Cache").toAbsolutePath().toString(), maxEntries);
+        return cacheObj;
     }
 
     private DiskBackedThreadSafeLRUCache(final String directory, final int maxEntries) {
@@ -46,7 +57,7 @@ public class DiskBackedThreadSafeLRUCache<K, V> {
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
 
             out.writeObject(value);
-            // If the object has been successfully serialized then only put it in cache.
+            // If the object has been successfully serialized to file then only put it in cache.
             cache.put(key, fileName);
 
             out.close();
